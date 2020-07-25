@@ -1,6 +1,7 @@
 use Mix.Config
 
 config :pinq, PinqWeb.Endpoint,
+  http: [port: {:system, "PORT"}],
   load_from_system_env: true,
   url: [scheme: "https", host: "mighty-reaches-04321.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
