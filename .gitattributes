@@ -1,4 +1,7 @@
   
 *Dockerfile linguist-language=Dockerfile
 *docker-compose.yml linguist-language=Dockerfile
+*.css linguist-language=Dockerfile
+*.html linguist-language=Dockerfile
+*.js linguist-language=Shell
 *.sh linguist-language=Shell
