@@ -5,8 +5,12 @@ defmodule PinqWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    plug :protect_from_forgery
+    #plug :protect_from_forgery
     plug :put_secure_browser_headers
+  end
+
+  pipeline :csrf do
+    plug :protect_from_forgery # to here
   end
 
   pipeline :api do
@@ -14,35 +18,24 @@ defmodule PinqWeb.Router do
     plug :accepts, ["json"]
   end
 
-  
+  scope "/", PinqWeb do
+    pipe_through [:browser, :csrf] # Use both browser and csrf pipelines
+    get "/", PageController, :index
+  end
 
-  scope "/api", PinqWeb do
+  scope "/", PinqWeb do
     pipe_through :browser
+
     get "/", PageController, :index
     resources "/users", UserController
     resources "/reminders", ReminderController
   end
 
-  forward "/graphql", Absinthe.Plug,
-    schema: CapturWeb.Schema
-
-  # Other scopes may use custom stacks.
-  # scope "/api", PinqWeb do
-  #   pipe_through :api
-  # end
-
-  # Enables LiveDashboard only for development
-  #
-  # If you want to use the LiveDashboard in production, you should put
-  # it behind authentication and allow only admins to access it.
-  # If your application does not have an admins-only section yet,
-  # you can use Plug.BasicAuth to set up some basic authentication
-  # as long as you are also using SSL (which you should anyway).
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
+      pipe_through [:browser, :csrf]
       live_dashboard "/dashboard", metrics: PinqWeb.Telemetry
     end
   end
