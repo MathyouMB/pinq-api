@@ -1,0 +1,4 @@
+  
+*Dockerfile linguist-language=Dockerfile
+*docker-compose.yml linguist-language=Dockerfile
+*.sh linguist-language=Shell
